@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FollowPlayer : MonoBehaviour
 {
-
+    // ------- script for the camera to move with the player. -------
     public Transform player;
 
     private void Update()

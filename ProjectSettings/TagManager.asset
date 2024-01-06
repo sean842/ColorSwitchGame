@@ -9,6 +9,7 @@ TagManager:
   - Pink
   - Magenta
   - ColorChanger
+  - Circle
   layers:
   - Default
   - TransparentFX

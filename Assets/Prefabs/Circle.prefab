@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 5521831190019687604}
   m_Layer: 0
   m_Name: Circle
-  m_TagString: Untagged
+  m_TagString: Circle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 100
+  player: {fileID: 1950209631772775443, guid: dddbf082a44b69a4dadc13d4a55829e8, type: 3}
 --- !u!1 &5521831190771150156
 GameObject:
   m_ObjectHideFlags: 0

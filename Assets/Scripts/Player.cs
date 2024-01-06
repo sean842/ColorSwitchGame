@@ -1,26 +1,41 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
 
-    public float jumpForce = 5f;
+    /* script for the player.
+     * 1.make the player change color.
+     * 2.make him jump.
+     * 3.check collision:
+     *   in the color changer - if true we:
+     *     change color,
+     *     instaniate new color changer & circle wheel,
+     *     destroy the color changer & circle.
+     *   in the circle wheel - if true we lose.
+     */
+
+
+    private float jumpForce = 5f;
+    private string currentColor;
     public Rigidbody2D rb;
     public SpriteRenderer sr;
-    public string currentColor;
 
-    [Header("Colors")]
-    public Color colorCyan;
-    public Color colorYellow;
-    public Color colorPink;
-    public Color colorMagenta;
+    public GameManager manager;
 
     [Header("prefabs")]
     public GameObject colorChanger;
     public GameObject Circle;
 
-
-
+    public List<string> colorTags = new List<string>() { "Cyan", "Yellow", "Pink", "Magenta" };
+    public List<Color> colorList = new List<Color>
+    {
+        new Color(53, 226, 242), // Cyan
+        new Color(246, 223, 14), // Yellow
+        new Color(255, 0, 128),  // Pink
+        new Color(140, 19, 251)  // Magenta
+    };
 
     private void Start()
     {
@@ -42,19 +57,18 @@ public class Player : MonoBehaviour
         // if we hit the color changer we change color and dwstroy it. later we instantiate it again.
         if(collision.tag == "ColorChanger")
         {
+            // we set rendom color and destroy the color changer.
             SetRandomColor();
             Destroy(collision.gameObject);
 
             // instantiate a new circle.
-            Instantiate(Circle, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
-
-            Rotator.success++;
+            GameObject newCircle =  Instantiate(Circle, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
+            manager.AddToCircleList(newCircle);
 
             // instantiate a new colorChanger..
             Instantiate(colorChanger, new Vector3(transform.position.x, transform.position.y + 10, transform.position.z), Quaternion.identity);
 
             return;
-            // we need to destroy the last circle!!!
         }
 
         // if we hit a diffrent color it's GAME OVER!
@@ -66,30 +80,14 @@ public class Player : MonoBehaviour
         }
     }
 
+
     void SetRandomColor()
     {
         int index = Random.Range(0, 4);
-
-        // maybe check if it's thw same color.
-        switch (index)
-        {
-            case 0:
-                currentColor = "Cyan";
-                sr.color = colorCyan;
-                break;
-            case 1:
-                currentColor = "Yellow";
-                sr.color = colorYellow;
-                break;
-            case 2:
-                currentColor = "Pink";
-                sr.color = colorPink;
-                break;
-            case 3:
-                currentColor = "Magenta";
-                sr.color= colorMagenta;
-                break;
-        }
+        currentColor = colorTags[index];
+        sr.color = colorList[index];
     }
+
+
 
 }
