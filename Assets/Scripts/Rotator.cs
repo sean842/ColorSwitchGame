@@ -1,85 +1,73 @@
 using UnityEngine;
 
-public class Rotator : MonoBehaviour
-{
+public class Rotator : MonoBehaviour {
+
+
     // --- script to rotate the circle wheel. ---
+    [Header("Speed")]
+    public float baseSpeed = 100;
+    public float speed;
 
-    //private float baseSpeed = 100;
-    //private float speed;
+    public float rotationTimer = 5;
+    public float normalDuration = 2f;
+    public float halfSpeedDuration = 5f;
 
+    public bool checkDuration = false;// if true - normal timet; else - half timer.
 
+    //public bool difficult = false;
+    public GameManager gameManager;
 
-    //public GameManager gameManager;
-
-    //private void Start()
-    //{
-    //    gameManager = FindObjectOfType<GameManager>();
-    //    speed = baseSpeed + gameManager.speedToAdd;
-    //}
-
-    //// Update is called once per frame
-    //void Update()
-    //{
-    //    transform.Rotate(0,0,speed*Time.deltaTime);
-
-    //}
-
-
-
-    private float baseSpeed = 100;
-    private float speed;
-
-    private float rotationTimer;
-    private float normalDuration = 3f;
-    private float halfSpeedDuration = 2f;
-
-    private GameManager gameManager;
-
-    private void Start()
-    {
+    private void Start() {
         gameManager = FindObjectOfType<GameManager>();
-        UpdateSpeed(); // Call this to set the initial speed
-    }
-
-    private void Update()
-    {
-        RotateCircle();
-
-        // Check if it's time to switch rotation state
-        if (rotationTimer >= GetDurationForCurrentState())
-        {
-            SwitchRotationState();
-        }
-    }
-
-    private void RotateCircle()
-    {
-        transform.Rotate(0, 0, speed * Time.deltaTime);
-
-        // Update the timer
-        rotationTimer += Time.deltaTime;
-    }
-
-    private void SwitchRotationState()
-    {
-        rotationTimer = 0f;
-
-        // Switch between normal and half-speed rotation
-        if (speed == baseSpeed)
-        {
-            gameManager.speedToAdd += 50; // Add speed every 3 passes directly
-            UpdateSpeed(); // Update the speed immediately
-        }
-    }
-
-    private float GetDurationForCurrentState()
-    {
-        return (speed == baseSpeed) ? normalDuration : halfSpeedDuration;
-    }
-
-    // Method to update the speed based on GameManager's speedToAdd
-    private void UpdateSpeed()
-    {
         speed = baseSpeed + gameManager.speedToAdd;
     }
+
+    private void Update() {
+
+        if (!gameManager.difficult) {
+            // spin normal and speed up when needed. 
+            Rotation();
+        }
+        else {
+           
+            Rotation();
+            UpdateTimer();
+
+            // Check if it's time to switch rotation state
+            if (rotationTimer <= 0) {
+                SetTimeAndSpeed();
+            }
+
+        }
+
+    }
+
+    /// <summary>
+    /// rotate the circle normaly.
+    /// </summary>
+    void Rotation() {
+        transform.Rotate(0, 0, speed * Time.deltaTime);
+    }
+
+    void UpdateTimer() {
+        // Update the timer
+        rotationTimer -= Time.deltaTime;
+    }
+
+    void SetTimeAndSpeed() {
+        // check for timer state & change timer time and rotation speed.
+        if (checkDuration == true) { 
+            rotationTimer = normalDuration;
+            speed = baseSpeed + gameManager.speedToAdd;
+            checkDuration = false;
+
+        }
+        else {
+            rotationTimer = halfSpeedDuration;
+            speed = speed / 2;
+            checkDuration = true;
+        }
+    }
+
+
 }

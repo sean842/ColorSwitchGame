@@ -1,9 +1,9 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Player : MonoBehaviour
-{
+public class Player : MonoBehaviour {
 
     /* script for the player.
      * 1.make the player change color.
@@ -37,32 +37,29 @@ public class Player : MonoBehaviour
         new Color(140, 19, 251)  // Magenta
     };
 
-    private void Start()
-    {
+    private void Start() {
+        //manager = gameObject.AddComponent<GameManager>();
+        manager = FindObjectOfType<GameManager>();
         SetRandomColor();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetButtonDown("Jump") || Input.GetMouseButtonDown(0))
-        {
+    void Update() {
+        if (Input.GetButtonDown("Jump") || Input.GetMouseButtonDown(0)) {
             // we add velocity insted of adding force because adding force could effect the player when it goes up & down, and we want only up.
-            rb.velocity = Vector2.up*jumpForce;
+            rb.velocity = Vector2.up * jumpForce;
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
+    private void OnTriggerEnter2D(Collider2D collision) {
         // if we hit the color changer we change color and dwstroy it. later we instantiate it again.
-        if(collision.tag == "ColorChanger")
-        {
+        if (collision.tag == "ColorChanger") {
             // we set rendom color and destroy the color changer.
             SetRandomColor();
             Destroy(collision.gameObject);
 
             // instantiate a new circle.
-            GameObject newCircle =  Instantiate(Circle, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
+            GameObject newCircle = Instantiate(Circle, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
             manager.AddToCircleList(newCircle);
 
             // instantiate a new colorChanger..
@@ -72,8 +69,7 @@ public class Player : MonoBehaviour
         }
 
         // if we hit a diffrent color it's GAME OVER!
-        if (collision.tag != currentColor)
-        {
+        if (collision.tag != currentColor) {
             Debug.Log("game over");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
@@ -81,13 +77,20 @@ public class Player : MonoBehaviour
     }
 
 
-    void SetRandomColor()
-    {
-        int index = Random.Range(0, 4);
+    void SetRandomColor() {
+        // get the color list
+        List<Color> newColorList = colorList;
+
+        // check if the corrent color isnt null or empty
+        if (newColorList.Contains(sr.color)) {
+            //get the color of the player from the list
+            newColorList.Remove(sr.color);
+        }
+        // pick a random color for the player.
+        int index = Random.Range(0, newColorList.Count);
         currentColor = colorTags[index];
         sr.color = colorList[index];
     }
-
 
 
 }
