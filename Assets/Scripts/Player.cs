@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 
@@ -16,18 +14,23 @@ public class Player : MonoBehaviour {
      *   in the circle wheel - if true we lose.
      */
 
-
+    [Header("Player")]
     private float jumpForce = 5f;
     private string currentColor;
     public Rigidbody2D rb;
     public SpriteRenderer sr;
 
-    public GameManager manager;
+    [SerializeField] private GameObject currentColorChanger;
+
 
     [Header("prefabs")]
     public GameObject colorChanger;
     public GameObject Circle;
 
+    [Header("scripts")]
+    public GameManager manager;
+
+    [Header("lists")]
     public List<string> colorTags = new List<string>() { "Cyan", "Yellow", "Pink", "Magenta" };
     public List<Color> colorList = new List<Color>
     {
@@ -57,39 +60,41 @@ public class Player : MonoBehaviour {
             // we set rendom color and destroy the color changer.
             SetRandomColor();
             Destroy(collision.gameObject);
+            manager.UpdateScore();
 
-            // instantiate a new circle.
+            // instantiate a new circle & add to list.
             GameObject newCircle = Instantiate(Circle, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
             manager.AddToCircleList(newCircle);
 
-            // instantiate a new colorChanger..
-            Instantiate(colorChanger, new Vector3(transform.position.x, transform.position.y + 10, transform.position.z), Quaternion.identity);
-
+            // instantiate a new colorChanger.
+            currentColorChanger = Instantiate(colorChanger, new Vector3(transform.position.x, transform.position.y + 10, transform.position.z), Quaternion.identity);
             return;
         }
 
         // if we hit a diffrent color it's GAME OVER!
         if (collision.tag != currentColor) {
-            Debug.Log("game over");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
+            Destroy(currentColorChanger);
+            manager.GameOver();
         }
     }
 
 
     void SetRandomColor() {
         // get the color list
-        List<Color> newColorList = colorList;
+        List<Color> newColorList = new List<Color>(colorList);
+        List<string> newColorTags = new List<string>(colorTags);
 
         // check if the corrent color isnt null or empty
         if (newColorList.Contains(sr.color)) {
             //get the color of the player from the list
             newColorList.Remove(sr.color);
+            newColorTags.Remove(currentColor);
+
         }
         // pick a random color for the player.
         int index = Random.Range(0, newColorList.Count);
-        currentColor = colorTags[index];
-        sr.color = colorList[index];
+        sr.color = newColorList[index];
+        currentColor = newColorTags[index];
     }
 
 

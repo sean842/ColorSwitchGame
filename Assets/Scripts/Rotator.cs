@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Rotator : MonoBehaviour {
 
-
     // --- script to rotate the circle wheel. ---
     [Header("Speed")]
     public float baseSpeed = 100;
