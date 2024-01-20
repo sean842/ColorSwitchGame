@@ -15,12 +15,6 @@ public class GameOver : MonoBehaviour
 
     public void PlayAgain() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        //GameOverUI.SetActive(false);
-        //GameStageUI.SetActive(true);
-
     }
-
-
-
 
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 public class Rotator : MonoBehaviour {
 
     // --- script to rotate the circle wheel. ---
+    // --- also make different speed if needs ---
+
     [Header("Speed")]
     public float baseSpeed = 100;
     public float speed;

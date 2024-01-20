@@ -5,10 +5,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
 
-    /* manage the game:
-     * add circle to list and remove them if nececery.
+    /* 
+     * Incharge of circles, Add, Destry, Speed.
      */
-
 
 
     private List<GameObject> circleList = new List<GameObject>(); // List to store the circles
@@ -19,6 +18,7 @@ public class GameManager : MonoBehaviour {
     public bool difficult = false;
     public int score = 0;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI startCount;
 
     public GameOver GameOverScript;
     public GameObject GameOverUI;
@@ -64,7 +64,6 @@ public class GameManager : MonoBehaviour {
         score++;
         scoreText.text = score.ToString();
     }
-
 
     public void GameOver() {
         foreach(GameObject circle in circleList) {

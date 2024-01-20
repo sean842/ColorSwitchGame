@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class StartBTN : MonoBehaviour
@@ -5,11 +6,13 @@ public class StartBTN : MonoBehaviour
     public GameObject startScreenUI;
     public GameObject gameUI;
 
+    public Fader Fader;
+    
     public void Press() {
-        startScreenUI.SetActive(false);
-        gameUI.SetActive(true);
+        Fader.Fading(startScreenUI, gameUI);
+        //startScreenUI.SetActive(false);
+        //gameUI.SetActive(true);
     }
-
 
 
 }
