@@ -42,9 +42,9 @@ public class GameManager : MonoBehaviour {
     // Method to remove the first circle in the list & Destroy it if there are more than 2 circles.
     private void RemoveFirstCircleIfNecessary() {
         if (circleList.Count > 2) {
-            GameObject firstCircle = circleList[0];
-            circleList.RemoveAt(0);
-            Destroy(firstCircle);
+            GameObject firstCircle = circleList[0]; // Find the first circle.
+            circleList.RemoveAt(0); // Remove the circle from the list.
+            Destroy(firstCircle); // Destroy it from the game.
         }
     }
 

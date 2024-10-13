@@ -18,7 +18,7 @@ public class Player : MonoBehaviour {
      */
 
     [Header("Player")]
-    private float jumpForce = 5f;
+    [SerializeField]private float jumpForce = 5f;
     private string currentColor;
     public Rigidbody2D rb;
     public SpriteRenderer sr;
